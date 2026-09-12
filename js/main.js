@@ -1,6 +1,30 @@
 // 移动端菜单切换
 const menuToggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.nav');
+const navHighlight = document.querySelector('.nav-highlight');
+
+if (navHighlight && nav) {
+  const navLinks = Array.from(nav.querySelectorAll('.nav-link'));
+
+  const moveHighlight = (target) => {
+    if (!target) return;
+    const navRect = nav.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const offsetX = targetRect.left - navRect.left;
+    const width = targetRect.width;
+    navHighlight.style.transform = `translateX(${offsetX}px)`;
+    navHighlight.style.width = `${width}px`;
+    navLinks.forEach((link) => link.classList.toggle('active', link === target));
+  };
+
+  navLinks.forEach((link) => {
+    link.addEventListener('mouseenter', () => moveHighlight(link));
+    link.addEventListener('focus', () => moveHighlight(link));
+    link.addEventListener('click', () => moveHighlight(link));
+  });
+
+  moveHighlight(navLinks[navLinks.length - 1]);
+}
 
 if (menuToggle && nav) {
   const setMenuState = (isOpen) => {
